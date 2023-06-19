@@ -1,4 +1,5 @@
 import type { HttpContextContract } from "@ioc:Adonis/Core/HttpContext";
+import { Attachment } from "@ioc:Adonis/Addons/AttachmentLite";
 import Product from "App/Models/Product";
 import {
     CreateProductValidator,
@@ -37,9 +38,14 @@ export default class ProductsController {
     }
 
     public async store({ request, response }: HttpContextContract) {
-        const payload = await request.validate(CreateProductValidator);
+        const { image, ...payload } = await request.validate(
+            CreateProductValidator
+        );
 
-        const product = await Product.create(payload);
+        const product = await Product.create({
+            image: Attachment.fromFile(image),
+            ...payload,
+        });
 
         response.created({ product });
     }
@@ -51,8 +57,16 @@ export default class ProductsController {
             return response.notFound({ message: "Product not found" });
         }
 
-        const payload = await request.validate(UpdateProductValidator);
-        await product.merge(payload).save();
+        const { image, ...payload } = await request.validate(
+            UpdateProductValidator
+        );
+
+        product.merge(payload);
+        if (image) {
+            product.image = Attachment.fromFile(image);
+        }
+
+        await product.save();
 
         response.ok({ product });
     }

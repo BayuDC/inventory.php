@@ -7,6 +7,10 @@ export class CreateProductValidator {
         code: schema.string([rules.trim()]),
         name: schema.string([rules.trim()]),
         unit: schema.string(),
+        image: schema.file({
+            size: "1mb",
+            extnames: ["jpg", "gif", "png"],
+        }),
     });
     public messages: CustomMessages = {};
 }
@@ -16,6 +20,10 @@ export class UpdateProductValidator {
         code: schema.string.optional([rules.trim()]),
         name: schema.string.optional([rules.trim()]),
         unit: schema.string.optional(),
+        image: schema.file.optional({
+            size: "1mb",
+            extnames: ["jpg", "gif", "png"],
+        }),
     });
     public messages: CustomMessages = {};
 }

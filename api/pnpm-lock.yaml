@@ -2,6 +2,7 @@ lockfileVersion: 5.4
 
 specifiers:
   "@adonisjs/assembler": ^5.9.5
+  "@adonisjs/attachment-lite": ^1.0.7
   "@adonisjs/core": ^5.9.0
   "@adonisjs/lucid": ^18.4.0
   "@adonisjs/repl": ^3.1.11
@@ -22,6 +23,7 @@ specifiers:
   youch-terminal: ^2.2.0
 
 dependencies:
+  "@adonisjs/attachment-lite": 1.0.7_u3dn2ztrkpncvpbv3qi7a55vny
   "@adonisjs/core": 5.9.0
   "@adonisjs/lucid": 18.4.0_hlgocrupveeevelp5syrv5qghq
   "@adonisjs/repl": 3.1.11_@adonisjs+core@5.9.0
@@ -107,6 +109,20 @@ packages:
     transitivePeerDependencies:
       - supports-color
     dev: true
+
+  /@adonisjs/attachment-lite/1.0.7_u3dn2ztrkpncvpbv3qi7a55vny:
+    resolution:
+      {
+        integrity: sha512-LIMVQ1ejrsDfzUAWwhL7W8GnWBFkEn9SvnY8Q8FnTihYD+Mjt3TO7Nxt5JhO3ZtuuvzcJMQUrH6xjYC4p/Yb8Q==,
+      }
+    peerDependencies:
+      "@adonisjs/core": ^5.3.0
+      "@adonisjs/lucid": ^17.0.0 || ^18.0.0
+    dependencies:
+      "@adonisjs/core": 5.9.0
+      "@adonisjs/lucid": 18.4.0_hlgocrupveeevelp5syrv5qghq
+      "@poppinss/utils": 4.0.4
+    dev: false
 
   /@adonisjs/bodyparser/8.1.8_fvzpfc37y3dof2z3g7al5tbyhy:
     resolution:

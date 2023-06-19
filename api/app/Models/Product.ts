@@ -1,5 +1,9 @@
 import { DateTime } from "luxon";
 import { BaseModel, column } from "@ioc:Adonis/Lucid/Orm";
+import {
+    AttachmentContract,
+    attachment,
+} from "@ioc:Adonis/Addons/AttachmentLite";
 
 export default class Product extends BaseModel {
     @column({ isPrimary: true })
@@ -16,6 +20,9 @@ export default class Product extends BaseModel {
 
     @column()
     public unit: string;
+
+    @attachment({ preComputeUrl: true })
+    public image: AttachmentContract;
 
     @column.dateTime({ autoCreate: true })
     public createdAt: DateTime;
