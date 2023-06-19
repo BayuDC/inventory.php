@@ -20,6 +20,11 @@
 
 import Route from "@ioc:Adonis/Core/Route";
 
-Route.get("/", async () => {
-    return { hello: "world" };
-});
+Route.group(() => {
+    Route.get("/", async () => {
+        return { message: "Hello World!" };
+    });
+    Route.resource("products", "ProductsController").apiOnly();
+})
+    .prefix("/api")
+    .where("id", Route.matchers.number());
