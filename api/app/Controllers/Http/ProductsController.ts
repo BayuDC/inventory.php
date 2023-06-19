@@ -1,5 +1,9 @@
 import type { HttpContextContract } from "@ioc:Adonis/Core/HttpContext";
 import Product from "App/Models/Product";
+import {
+    CreateProductValidator,
+    UpdateProductValidator,
+} from "App/Validators/ProductValidator";
 
 export default class ProductsController {
     public async index({ request, response }: HttpContextContract) {
@@ -13,7 +17,7 @@ export default class ProductsController {
             .orderBy(sortBy, order)
             .paginate(page, limit);
 
-        return response.json({
+        response.ok({
             products: products.all(),
             page: {
                 current: products.currentPage,
@@ -26,17 +30,42 @@ export default class ProductsController {
         const product = await Product.find(params.id);
 
         if (!product) {
-            return response.status(404).json({
-                message: "Product not found",
-            });
+            return response.notFound({ message: "Product not found" });
         }
 
-        return response.json({ product });
+        response.ok({ product });
     }
 
-    public async store({}: HttpContextContract) {}
+    public async store({ request, response }: HttpContextContract) {
+        const payload = await request.validate(CreateProductValidator);
 
-    public async update({}: HttpContextContract) {}
+        const product = await Product.create(payload);
 
-    public async destroy({}: HttpContextContract) {}
+        response.created({ product });
+    }
+
+    public async update({ request, response, params }: HttpContextContract) {
+        const product = await Product.find(params.id);
+
+        if (!product) {
+            return response.notFound({ message: "Product not found" });
+        }
+
+        const payload = await request.validate(UpdateProductValidator);
+        await product.merge(payload).save();
+
+        response.ok({ product });
+    }
+
+    public async destroy({ response, params }: HttpContextContract) {
+        const product = await Product.find(params.id);
+
+        if (!product) {
+            return response.notFound({ message: "Product not found" });
+        }
+
+        await product.delete();
+
+        response.noContent();
+    }
 }
