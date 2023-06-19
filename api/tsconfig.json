@@ -5,6 +5,7 @@
   "compilerOptions": {
     "outDir": "build",
     "rootDir": "./",
+    "baseUrl": "./",
     "sourceMap": true,
     "paths": {
       "App/*": ["./app/*"],
@@ -15,7 +16,9 @@
     "types": [
       "@adonisjs/core",
       "@adonisjs/repl",
-      "@japa/preset-adonis/build/adonis-typings"
+      "@japa/preset-adonis/build/adonis-typings",
+      "@adonisjs/lucid",
+      "@adonisjs/attachment-lite"
     ]
   }
 }
