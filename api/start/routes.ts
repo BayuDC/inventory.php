@@ -24,6 +24,11 @@ Route.group(() => {
     Route.get("/", async () => {
         return { message: "Hello World!" };
     });
+
+    Route.group(() => {
+        Route.post("/login", "AuthController.login");
+    }).prefix("/auth");
+
     Route.resource("products", "ProductsController").apiOnly();
 })
     .prefix("/api")
