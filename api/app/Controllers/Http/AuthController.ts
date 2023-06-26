@@ -1,10 +1,12 @@
 import type { HttpContextContract } from "@ioc:Adonis/Core/HttpContext";
 import AuthValidator from "App/Validators/AuthValidator";
-
+import jwt from "jsonwebtoken";
 import Hash from "@ioc:Adonis/Core/Hash";
+import Env from "@ioc:Adonis/Core/Env";
 import User from "App/Models/User";
 
 export default class AuthController {
+    public async index() {}
     public async login({ response, request }: HttpContextContract) {
         const payload = await request.validate(AuthValidator);
 
@@ -20,8 +22,21 @@ export default class AuthController {
             });
         }
 
-        response.ok({
-            user,
-        });
+        const token = jwt.sign(
+            {
+                userId: user.id,
+                user: {
+                    email: user.email,
+                    name: user.name,
+                    role: user.role,
+                },
+            },
+            Env.get("JWT_SECRET"),
+            {
+                expiresIn: "10m",
+            }
+        );
+
+        response.ok({ user, token });
     }
 }
