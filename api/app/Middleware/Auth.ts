@@ -6,7 +6,9 @@ import jwt from "jsonwebtoken";
 export default class Auth {
     public async handle(ctx: HttpContextContract, next: () => Promise<void>) {
         try {
-            const token = ctx.request.input("token");
+            const token =
+                ctx.request.cookie("access_token") ||
+                ctx.request.input("access_token");
             if (!token) throw null;
 
             const payload = jwt.verify(token, Env.get("JWT_SECRET"));

@@ -36,11 +36,10 @@ export default class AuthController {
                 },
             },
             Env.get("JWT_SECRET"),
-            {
-                expiresIn: "10m",
-            }
+            { expiresIn: "10m" }
         );
 
+        response.cookie("access_token", token, { maxAge: "10m" });
         response.ok({ user, token });
     }
 }
