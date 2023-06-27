@@ -1,9 +1,11 @@
 import type { HttpContextContract } from "@ioc:Adonis/Core/HttpContext";
 import AuthValidator from "App/Validators/AuthValidator";
+import crypto from "crypto";
 import jwt from "jsonwebtoken";
 import Hash from "@ioc:Adonis/Core/Hash";
 import Env from "@ioc:Adonis/Core/Env";
 import User from "App/Models/User";
+import UserToken from "App/Models/UserToken";
 
 export default class AuthController {
     public async index({ response, user }: HttpContextContract) {
@@ -26,7 +28,7 @@ export default class AuthController {
             });
         }
 
-        const token = jwt.sign(
+        const accessToken = jwt.sign(
             {
                 userId: user.id,
                 user: {
@@ -38,8 +40,18 @@ export default class AuthController {
             Env.get("JWT_SECRET"),
             { expiresIn: "10m" }
         );
+        const refreshToken = crypto.randomBytes(64).toString("hex");
 
-        response.cookie("access_token", token, { maxAge: "10m" });
-        response.ok({ user, token });
+        await user
+            .related("tokens")
+            .query()
+            .where("expired_at", "<", "NOW()")
+            .delete();
+        await user.related("tokens").create({ value: refreshToken });
+
+        response.cookie("access_token", accessToken, { maxAge: "10m" });
+        response.cookie("refresh_token", refreshToken, { maxAge: "7d" });
+
+        response.created({ user, accessToken, refreshToken });
     }
 }
