@@ -6,7 +6,11 @@ import Env from "@ioc:Adonis/Core/Env";
 import User from "App/Models/User";
 
 export default class AuthController {
-    public async index() {}
+    public async index({ response, user }: HttpContextContract) {
+        response.ok({
+            user,
+        });
+    }
     public async login({ response, request }: HttpContextContract) {
         const payload = await request.validate(AuthValidator);
 
