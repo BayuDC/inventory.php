@@ -24,6 +24,13 @@ Route.group(() => {
     Route.get("/", async () => {
         return { message: "Hello World!" };
     });
+
+    Route.group(() => {
+        Route.get("/", "AuthController.index").middleware("auth");
+        Route.post("/login", "AuthController.login");
+        Route.post("/refresh", "AuthController.refresh");
+    }).prefix("/auth");
+
     Route.resource("products", "ProductsController").apiOnly();
 })
     .prefix("/api")
