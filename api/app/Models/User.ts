@@ -48,10 +48,10 @@ export default class User extends BaseModel {
         }
     }
 
-    public async generateToken(): Promise<[string, string, AuthUser]> {
+    public async generateToken(): Promise<[string, string, any]> {
         const jwtPayload = {
-            userId: this.id,
             user: {
+                id: this.id,
                 email: this.email,
                 name: this.name,
                 role: this.role,

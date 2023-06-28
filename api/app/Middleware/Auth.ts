@@ -14,7 +14,7 @@ export default class Auth {
             if (!this.accessToken) return;
 
             const payload = jwt.verify(this.accessToken, Env.get("JWT_SECRET"));
-            return payload as AuthUser;
+            return (payload as any).user as AuthUser;
         } catch {
             return;
         }
@@ -53,7 +53,7 @@ export default class Auth {
             const [accessToken, refreshToken, jwtPayload] =
                 (await user.generateToken()) || [];
 
-            ctx.user = jwtPayload;
+            ctx.user = jwtPayload.user;
             ctx.response.cookie("access_token", accessToken, { maxAge: "10m" });
             ctx.response.cookie("refresh_token", refreshToken, {
                 maxAge: "7d",
